@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rocket Queen Signal</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a2e;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        #container {
+            background-color: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        #rocketQueenBtn {
+            background-color: #e94560;
+            color: #ffffff;
+            font-size: 18px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        #rocketQueenBtn:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+        }
+        #predictionOutput {
+            background-color: #0f3460;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-size: 16px;
+            white-space: pre-line;
+            font-family: 'Courier New', monospace;
+        }
+        #timer {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #ffcc00;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <h1>🚀 Rocket Queen Signal</h1>
+        <button id="rocketQueenBtn">Générer le Signal</button>
+        <div id="predictionOutput"></div>
+        <div id="timer"></div>
+    </div>
+
+    <script>
+        function getRandom(min, max) {
+            return Math.random() * (max - min) + min;
+        }
+
+        function getRocketQueenPrediction() {
+            const coefMin = getRandom(4.00, 4.00).toFixed(2);
+
+            let coefMax;
+            const random = Math.random() * 100;
+            if (random <= 95) {
+                coefMax = getRandom(4.01, 50.99).toFixed(2);
+            } else if (random <= 99) {
+                coefMax = getRandom(51.00, 80.99).toFixed(2);
+            } else {
+                coefMax = getRandom(81.00, 100.00).toFixed(2);
+            }
+
+            const now = new Date();
+            const minOffset = 1 * 60 * 1000; // +1 minute en millisecondes
+            const maxOffset = 3 * 60 * 1000; // +3 minutes en millisecondes
+            const randomTime = new Date(now.getTime() + getRandom(minOffset, maxOffset));
+            const timeString = randomTime.toTimeString().split(' ')[0]; // hh:mm:ss
+
+            return `ROCKET QUEEN\n\nCoef: ${coefMin}x - ${coefMax}x\nTIME: ${timeString}`;
+        }
+
+        function startCooldown() {
+            const button = document.getElementById('rocketQueenBtn');
+            const timer = document.getElementById('timer');
+            let countdown = 30; // 30 secondes
+
+            button.disabled = true;
+            timer.textContent = `Veuillez patienter ${countdown} secondes...`;
+
+            const interval = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    timer.textContent = `Veuillez patienter ${countdown} secondes...`;
+                } else {
+                    clearInterval(interval);
+                    button.disabled = false;
+                    timer.textContent = '';
+                }
+            }, 1000);
+        }
+
+        document.getElementById('rocketQueenBtn').addEventListener('click', function() {
+            const prediction = getRocketQueenPrediction();
+            document.getElementById('predictionOutput').textContent = prediction;
+            startCooldown();
+        });
+    </script>
+</body>
+</html>
